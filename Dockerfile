@@ -1,7 +1,7 @@
 FROM rust:slim
 
-RUN --mount=type=cache,target=/var/cache/apt \
-    --mount=type=cache,target=/var/lib/apt \
+RUN --mount=type=cache,sharing=locked,target=/var/cache/apt \
+    --mount=type=cache,sharing=locked,target=/var/lib/apt \
     apt-get update && apt-get install -y curl git bash xz-utils llvm lld
 
 # Install Zig
@@ -19,8 +19,8 @@ RUN rustup target add \
     x86_64-pc-windows-gnu
 
 # We need LLVM
-RUN --mount=type=cache,target=/var/cache/apt \
-    --mount=type=cache,target=/var/lib/apt \
+RUN --mount=type=cache,sharing=locked,target=/var/cache/apt \
+    --mount=type=cache,sharing=locked,target=/var/lib/apt \
     apt-get update && apt-get install -y llvm lld \
     && ln -s /usr/bin/clang-19 /usr/bin/clang \
     && ln -s /usr/bin/clang++-19 /usr/bin/clang++
@@ -30,8 +30,8 @@ RUN git clone --depth 1 https://github.com/tpoechtrager/osxcross.git /osxcross
 ARG OSX_VERSION_MIN=12.0
 ARG OSX_TAR='MacOSX12.sdk.tar.xz'
 
-RUN --mount=type=cache,target=/var/cache/apt \
-    --mount=type=cache,target=/var/lib/apt \
+RUN --mount=type=cache,sharing=locked,target=/var/cache/apt \
+    --mount=type=cache,sharing=locked,target=/var/lib/apt \
     curl -sfLo /osxcross/tarballs/${OSX_TAR} https://github.com/bdwyertech/dkr-go-crosscompile/releases/download/macsdk/${OSX_TAR} \
     && apt-get update && apt-get install -y build-essential clang cmake libxml2-dev libssl-dev python3 zlib1g-dev \
     && OSX_VERSION_MIN=${OSX_VERSION_MIN} UNATTENDED=1 /osxcross/build.sh \
