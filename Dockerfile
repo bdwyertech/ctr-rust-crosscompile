@@ -18,13 +18,6 @@ RUN rustup target add \
     x86_64-unknown-linux-gnu \
     x86_64-pc-windows-gnu
 
-# We need LLVM
-RUN --mount=type=cache,sharing=locked,target=/var/cache/apt \
-    --mount=type=cache,sharing=locked,target=/var/lib/apt \
-    apt-get update && apt-get install -y llvm lld \
-    && ln -s /usr/bin/clang-19 /usr/bin/clang \
-    && ln -s /usr/bin/clang++-19 /usr/bin/clang++
-
 RUN git clone --depth 1 https://github.com/tpoechtrager/osxcross.git /osxcross
 
 ARG OSX_VERSION_MIN=12.0
@@ -37,7 +30,14 @@ RUN --mount=type=cache,sharing=locked,target=/var/cache/apt \
     && OSX_VERSION_MIN=${OSX_VERSION_MIN} UNATTENDED=1 /osxcross/build.sh \
     && rm -f /osxcross/tarballs/${OSX_TAR} \
     && rm -rf /osxcross/build \
-    && apt-get remove -y build-essential clang cmake libxml2-dev libssl-dev zlib1g-dev
+    && apt-get remove -y build-essential clang cmake libxml2-dev libssl-dev python3 zlib1g-dev
+
+# We need LLVM & LLD
+RUN --mount=type=cache,sharing=locked,target=/var/cache/apt \
+    --mount=type=cache,sharing=locked,target=/var/lib/apt \
+    apt-get update && apt-get install -y llvm lld \
+    && ln -s /usr/bin/clang-19 /usr/bin/clang \
+    && ln -s /usr/bin/clang++-19 /usr/bin/clang++
 
 ENV SDK=MacOSX12.sdk
 ENV SDKROOT=/osxcross/target/SDK/MacOSX12.sdk
