@@ -2,7 +2,7 @@ FROM rust:slim
 
 RUN --mount=type=cache,sharing=locked,target=/var/cache/apt \
     --mount=type=cache,sharing=locked,target=/var/lib/apt \
-    apt-get update && apt-get install -y curl git bash xz-utils llvm lld
+    apt-get update && apt-get install -y curl git bash xz-utils
 
 # Install Zig
 ARG ZIG_VERSION=0.15.2
