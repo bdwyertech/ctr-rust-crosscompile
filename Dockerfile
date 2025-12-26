@@ -36,7 +36,7 @@ RUN --mount=type=cache,sharing=locked,target=/var/cache/apt \
 RUN --mount=type=cache,sharing=locked,target=/var/cache/apt \
     --mount=type=cache,sharing=locked,target=/var/lib/apt \
     apt-get update && apt-get install -y llvm lld \
-    gcc-aarch64-linux-gnu g++-aarch64-linux-gnu gcc-mingw-w64 \
+    gcc-aarch64-linux-gnu g++-aarch64-linux-gnu gcc-mingw-w64 g++-mingw-w64 \
     && ln -s /usr/bin/clang-19 /usr/bin/clang \
     && ln -s /usr/bin/clang++-19 /usr/bin/clang++
 
