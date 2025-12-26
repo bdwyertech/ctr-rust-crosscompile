@@ -37,7 +37,7 @@ RUN --mount=type=cache,sharing=locked,target=/var/cache/apt \
     && OSX_VERSION_MIN=${OSX_VERSION_MIN} UNATTENDED=1 /osxcross/build.sh \
     && rm -f /osxcross/tarballs/${OSX_TAR} \
     && rm -rf /osxcross/build \
-    && apt-get remove -y build-essential clang cmake libxml2-dev libssl-dev python3 zlib1g-dev
+    && apt-get remove -y build-essential clang cmake libxml2-dev libssl-dev zlib1g-dev
 
 ENV SDK=MacOSX12.sdk
 ENV SDKROOT=/osxcross/target/SDK/MacOSX12.sdk
