@@ -32,10 +32,11 @@ RUN --mount=type=cache,sharing=locked,target=/var/cache/apt \
     && rm -rf /osxcross/build \
     && apt-get remove -y build-essential clang cmake libxml2-dev libssl-dev python3 zlib1g-dev
 
-# We need LLVM & LLD
+# We need LLVM & LLD, as well as cross-compile packages (MinGW for Windows, etc.)
 RUN --mount=type=cache,sharing=locked,target=/var/cache/apt \
     --mount=type=cache,sharing=locked,target=/var/lib/apt \
     apt-get update && apt-get install -y llvm lld \
+    gcc-aarch64-linux-gnu g++-aarch64-linux-gnu gcc-mingw-w64 \
     && ln -s /usr/bin/clang-19 /usr/bin/clang \
     && ln -s /usr/bin/clang++-19 /usr/bin/clang++
 
