@@ -16,7 +16,8 @@ RUN rustup target add \
     x86_64-apple-darwin \
     aarch64-unknown-linux-gnu \
     x86_64-unknown-linux-gnu \
-    x86_64-pc-windows-gnu
+    x86_64-pc-windows-gnu \
+    aarch64-pc-windows-gnullvm
 
 RUN git clone --depth 1 https://github.com/tpoechtrager/osxcross.git /osxcross
 
