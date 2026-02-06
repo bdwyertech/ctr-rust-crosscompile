@@ -12,6 +12,10 @@ on:
   push:
     branches: ['main']
 
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: true
+
 env:
   IMAGE_NAME: bdwyertech/rust-crosscompile
 
