@@ -1,3 +1,4 @@
+FROM ghcr.io/bdwyertech/osxcross:slim as osxcross
 FROM rust:slim
 
 RUN --mount=type=cache,sharing=locked,target=/var/cache/apt \
@@ -19,19 +20,18 @@ RUN rustup target add \
     x86_64-pc-windows-gnu \
     aarch64-pc-windows-gnullvm
 
-RUN git clone --depth 1 https://github.com/tpoechtrager/osxcross.git /osxcross
-
-ARG OSX_VERSION_MIN=12.0
-ARG OSX_TAR='MacOSX12.sdk.tar.xz'
-
-RUN --mount=type=cache,sharing=locked,target=/var/cache/apt \
-    --mount=type=cache,sharing=locked,target=/var/lib/apt \
-    curl -sfLo /osxcross/tarballs/${OSX_TAR} https://github.com/bdwyertech/dkr-go-crosscompile/releases/download/macsdk/${OSX_TAR} \
-    && apt-get update && apt-get install -y build-essential clang cmake libxml2-dev libssl-dev python3 zlib1g-dev \
-    && OSX_VERSION_MIN=${OSX_VERSION_MIN} UNATTENDED=1 /osxcross/build.sh \
-    && rm -f /osxcross/tarballs/${OSX_TAR} \
-    && rm -rf /osxcross/build \
-    && apt-get remove -y build-essential clang cmake libxml2-dev libssl-dev python3 zlib1g-dev
+COPY --from=osxcross /osxcross /osxcross
+# RUN git clone --depth 1 https://github.com/tpoechtrager/osxcross.git /osxcross
+# ARG OSX_VERSION_MIN=12.0
+# ARG OSX_TAR='MacOSX12.sdk.tar.xz'
+# RUN --mount=type=cache,sharing=locked,target=/var/cache/apt \
+#     --mount=type=cache,sharing=locked,target=/var/lib/apt \
+#     curl -sfLo /osxcross/tarballs/${OSX_TAR} https://github.com/bdwyertech/dkr-go-crosscompile/releases/download/macsdk/${OSX_TAR} \
+#     && apt-get update && apt-get install -y build-essential clang cmake libxml2-dev libssl-dev python3 zlib1g-dev \
+#     && OSX_VERSION_MIN=${OSX_VERSION_MIN} UNATTENDED=1 /osxcross/build.sh \
+#     && rm -f /osxcross/tarballs/${OSX_TAR} \
+#     && rm -rf /osxcross/build \
+#     && apt-get remove -y build-essential clang cmake libxml2-dev libssl-dev python3 zlib1g-dev
 
 # We need LLVM & LLD, as well as cross-compile packages (MinGW for Windows, etc.)
 RUN --mount=type=cache,sharing=locked,target=/var/cache/apt \
