@@ -1,4 +1,4 @@
-FROM ghcr.io/bdwyertech/osxcross:slim as osxcross
+FROM ghcr.io/bdwyertech/osxcross:slim AS osxcross
 FROM rust:slim
 
 RUN --mount=type=cache,sharing=locked,target=/var/cache/apt \
